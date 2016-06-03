@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xyz.mapper.OptionMapper">
+
+	<resultMap id="BaseResultMap" type="cn.xyz.mianshi.vo.QuestionOptionVO">
+		<result column="id" property="optionId" jdbcType="INTEGER" />
+		<result column="question_id" property="questionId" jdbcType="INTEGER" />
+		<result column="body" property="body" jdbcType="VARCHAR" />
+		<result column="correct" property="correct" jdbcType="INTEGER" />
+		<result column="score" property="score" jdbcType="INTEGER" />
+	</resultMap>
+
+	<insert id="insert" parameterType="cn.xyz.mianshi.vo.QuestionOptionVO">
+		<selectKey keyProperty="optionId" resultType="java.lang.Integer"
+			order="AFTER">
+		<![CDATA[
+		SELECT LAST_INSERT_ID() as optionId
+		]]>
+		</selectKey>
+		<![CDATA[
+		INSERT INTO tb_exam_question_option (
+			question_id,
+			body,
+			correct,
+			score
+		)
+		VALUES
+			(
+				#{questionId,jdbcType=INTEGER},
+				#{body,jdbcType=VARCHAR},
+				#{correct,jdbcType=INTEGER},
+				#{score,jdbcType=INTEGER}
+			)
+		]]>
+	</insert>
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE FROM tb_exam_question_option WHERE id = ${value}
+	</delete>
+
+	<update id="update" parameterType="cn.xyz.mianshi.vo.QuestionOptionVO">
+		UPDATE tb_exam_question_option
+		<set>
+			<if test="questionId != null">
+				question_id = #{questionId,jdbcType=INTEGER},
+			</if>
+			<if test="body != null">
+				body = #{body,jdbcType=VARCHAR},
+			</if>
+			<if test="correct != null">
+				correct = #{correct,jdbcType=INTEGER},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE id = #{optionId,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByQuestionId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_exam_question_option WHERE question_id = ${value}
+	</select>
+
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_exam_question_option WHERE id = ${value}
+	</select>
+
+</mapper>

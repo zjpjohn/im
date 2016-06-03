@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xyz.mapper.CompanyMapper">
+
+	<resultMap id="BaseResultMap" type="cn.xyz.mianshi.vo.CompanyVO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="website" property="website" jdbcType="VARCHAR" />
+		<result column="scale" property="scale" jdbcType="INTEGER" />
+		<result column="industry_id" property="industryId" jdbcType="INTEGER" />
+		<result column="nature_id" property="natureId" jdbcType="INTEGER" />
+		<result column="country_id" property="countryId" jdbcType="INTEGER" />
+		<result column="province_id" property="provinceId" jdbcType="INTEGER" />
+		<result column="city_id" property="cityId" jdbcType="INTEGER" />
+		<result column="area_id" property="areaId" jdbcType="INTEGER" />
+		<result column="longitude" property="longitude" jdbcType="DOUBLE" />
+		<result column="latitude" property="latitude" jdbcType="DOUBLE" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="invite_code" property="inviteCode" jdbcType="VARCHAR" />
+		<result column="total" property="total" jdbcType="INTEGER" />
+		<result column="balance" property="balance" jdbcType="INTEGER" />
+		<result column="pay_mode" property="payMode" jdbcType="INTEGER" />
+		<result column="vtotal" property="vtotal" jdbcType="INTEGER" />
+		<result column="vbalance" property="vbalance" jdbcType="INTEGER" />
+		<result column="pay_end_time" property="payEndTime" jdbcType="INTEGER" />
+		<result column="credential" property="credential" jdbcType="VARCHAR" />
+		<result column="credential_url" property="credentialUrl"
+			jdbcType="VARCHAR" />
+		<result column="is_auth" property="isAuth" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="INTEGER" />
+		<result column="modify_time" property="modifyTime" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+
+	<insert id="add" parameterType="cn.xyz.mianshi.vo.CompanyVO">
+		<selectKey keyProperty="id" resultType="java.lang.Integer"
+			order="AFTER">
+		<![CDATA[
+		SELECT LAST_INSERT_ID() as id
+		]]>
+		</selectKey>
+	<![CDATA[
+	INSERT INTO tb_company (
+		name,
+		description,
+		website,
+		scale,
+		industry_id,
+		nature_id,
+		country_id,
+		province_id,
+		city_id,
+		area_id,
+		longitude,
+		latitude,
+		address,
+		invite_code,
+		total,
+		balance,
+		pay_mode,
+		vtotal,
+		vbalance,
+		pay_end_time,
+		credential,
+		credential_url,
+		is_auth,
+		create_time,
+		modify_time,
+		status
+	)
+	VALUES
+		(
+			#{name,jdbcType=VARCHAR}, 
+			#{description,jdbcType=VARCHAR}, 
+			#{website,jdbcType=VARCHAR}, 
+			#{scale,jdbcType=INTEGER},
+			#{industryId,jdbcType=INTEGER},
+			#{natureId,jdbcType=INTEGER},
+			#{countryId,jdbcType=INTEGER},
+			#{provinceId,jdbcType=INTEGER},
+			#{cityId,jdbcType=INTEGER},
+			#{areaId,jdbcType=INTEGER},
+			#{longitude,jdbcType=DOUBLE},
+			#{latitude,jdbcType=DOUBLE},
+			#{address,jdbcType=VARCHAR},
+			'',
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			#{credential,jdbcType=VARCHAR},
+			#{credentialUrl,jdbcType=VARCHAR},
+			0,
+			UNIX_TIMESTAMP(),
+			UNIX_TIMESTAMP(),
+			1
+		)
+	]]>
+	</insert>
+
+	<update id="updateOthers" parameterType="java.util.Map">
+		UPDATE tb_company
+		<set>
+			<if test="vcount &gt; 0">
+				total = total + ${vcount}, balance = balance + ${vcount},
+			</if>
+			<if test="vcount &lt; 0">
+				balance = balance + ${vcount},
+			</if>
+			<if test="v &gt; 0">
+				vtotal = vtotal + ${v}, vbalance = vbalance + ${v},
+			</if>
+			<if test="v &lt; 0">
+				vbalance = vbalance + ${v},
+			</if>
+			<if test="payEndTime != null">
+				pay_end_time = ${payEndTime},
+			</if>
+			modify_time = UNIX_TIMESTAMP()
+		</set>
+		WHERE id = ${companyId}
+	</update>
+
+	<update id="update" parameterType="cn.xyz.mianshi.vo.CompanyVO">
+		UPDATE tb_company
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="website != null">
+				website = #{website,jdbcType=INTEGER},
+			</if>
+			<if test="scale != null">
+				scale = #{scale,jdbcType=INTEGER},
+			</if>
+			<if test="industryId != null">
+				industry_id = #{industryId,jdbcType=INTEGER},
+			</if>
+			<if test="natureId != null">
+				nature_id = #{natureId,jdbcType=INTEGER},
+			</if>
+			<if test="countryId != null">
+				country_id = #{countryId,jdbcType=INTEGER},
+			</if>
+			<if test="provinceId != null">
+				province_id = #{provinceId,jdbcType=INTEGER},
+			</if>
+			<if test="cityId != null">
+				city_id = #{cityId,jdbcType=INTEGER},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId,jdbcType=INTEGER},
+			</if>
+			<if test="longitude != null">
+				province_id = #{provinceId,jdbcType=DOUBLE},
+			</if>
+			<if test="latitude != null">
+				province_id = #{provinceId,jdbcType=DOUBLE},
+			</if>
+			<if test="address != null">
+				province_id = #{provinceId,jdbcType=VARCHAR},
+			</if>
+			<if test="inviteCode != null">
+				invite_code = ${inviteCode},
+			</if>
+			<if test="payMode != null">
+				pay_mode = ${payMode},
+			</if>
+			<if test="credential != null">
+				credential = '${credential}',
+			</if>
+			<if test="credentialUrl != null">
+				credential_url = '${credentialUrl}',
+			</if>
+			<if test="isAuth != null">
+				is_auth = ${isAuth},
+			</if>
+			<if test="status != null">
+				status = ${status},
+			</if>
+			modify_time = UNIX_TIMESTAMP()
+		</set>
+		WHERE id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	<![CDATA[
+	SELECT * FROM tb_company WHERE id = ${value}
+	]]>
+	</select>
+
+	<select id="countByExample" parameterType="cn.xyz.mianshi.example.CompanyExample"
+		resultType="java.lang.Integer">
+		SELECT count(*) FROM tb_company WHERE status = 1
+		<if test="industryId != null"> AND industry_id = ${industryId}</if>
+		<if test="natureId != null"> AND nature_id = ${natureId}</if>
+		<if test="name != null"> AND name like '%${name}%'</if>
+		<if test="scale != null"> AND scale = ${scale}</if>
+		<if test="cityId != null"> AND city_id = ${cityId}</if>
+		<if test="isAuth != null"> AND is_auth = ${isAuth}</if>
+	</select>
+
+	<select id="selectByExample" parameterType="cn.xyz.mianshi.example.CompanyExample"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_company WHERE status = 1
+		<if test="industryId != null"> AND industry_id = ${industryId}</if>
+		<if test="natureId != null"> AND nature_id = ${natureId}</if>
+		<if test="name != null"> AND name like '%${name}%'</if>
+		<if test="scale != null"> AND scale = ${scale}</if>
+		<if test="cityId != null"> AND city_id = ${cityId}</if>
+		<if test="isAuth != null"> AND is_auth = ${isAuth}</if>
+		LIMIT ${start},${pageSize}
+	</select>
+
+</mapper>

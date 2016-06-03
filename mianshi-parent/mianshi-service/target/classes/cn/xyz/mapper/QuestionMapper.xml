@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xyz.mapper.QuestionMapper">
+
+	<resultMap id="BaseResultMap" type="cn.xyz.mianshi.vo.QuestionVO">
+		<result column="id" property="questionId" jdbcType="INTEGER" />
+		<result column="company_id" property="companyId" jdbcType="INTEGER" />
+		<result column="exam_id" property="examId" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="body" property="body" jdbcType="VARCHAR" />
+		<result column="answer" property="answer" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="INTEGER" />
+		<result column="score" property="score" jdbcType="INTEGER" />
+	</resultMap>
+
+	<insert id="insert" parameterType="cn.xyz.mianshi.vo.QuestionVO">
+		<selectKey keyProperty="questionId" resultType="java.lang.Integer"
+			order="AFTER">
+		<![CDATA[
+		SELECT LAST_INSERT_ID() as questionId
+		]]>
+		</selectKey>
+		<![CDATA[
+		INSERT INTO tb_exam_question (
+			company_id,
+			exam_id,
+			type,
+			body,
+			answer,
+			time,
+			score
+		)
+		VALUES
+			(
+				#{companyId,jdbcType=INTEGER},
+				#{examId,jdbcType=INTEGER},
+				#{type,jdbcType=INTEGER},
+				#{body,jdbcType=VARCHAR},
+				#{answer,jdbcType=VARCHAR},
+				#{time,jdbcType=INTEGER},
+				#{score,jdbcType=INTEGER}
+			)
+		]]>
+	</insert>
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE FROM tb_exam_question
+		WHERE id = ${value}
+	</delete>
+
+	<update id="update" parameterType="cn.xyz.mianshi.vo.CompanyVO">
+		UPDATE tb_exam_question
+		<set>
+			<if test="examId != null">
+				exam_id = #{examId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="body != null">
+				body = #{body,jdbcType=VARCHAR},
+			</if>
+			<if test="answer != null">
+				answer = #{answer,jdbcType=VARCHAR},
+			</if>
+			<if test="time != null">
+				time = #{time,jdbcType=INTEGER},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=INTEGER},
+			</if>
+			modify_time = NOW()
+		</set>
+		WHERE id = #{questionId,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByCompanyId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_exam_question WHERE company_id = ${value}
+	</select>
+	<select id="selectByExamId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_exam_question WHERE exam_id = ${value}
+	</select>
+	<select id="countByExample" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM tb_exam_question WHERE 1 = 1
+		<if test="companyId != null">
+			AND company_id = ${companyId}
+		</if>
+		<if test="examId != null">
+			AND exam_id = ${examId}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_exam_question WHERE 1 = 1
+		<if test="companyId != null">
+			AND company_id = ${companyId}
+		</if>
+		<if test="examId != null">
+			AND exam_id = ${examId}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_exam_question WHERE id = ${value}
+	</select>
+
+</mapper>

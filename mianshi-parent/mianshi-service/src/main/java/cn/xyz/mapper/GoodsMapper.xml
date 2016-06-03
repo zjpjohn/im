@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xyz.mapper.GoodsMapper">
+
+	<resultMap id="GoodsResultMap" type="cn.xyz.mianshi.vo.goods.Goods">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="category_id" property="categoryId" jdbcType="INTEGER" />
+		<result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="INTEGER" />
+		<result column="value" property="value" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="OrderResultMap" type="cn.xyz.mianshi.vo.goods.Order">
+		<result column="order_seq" property="orderSeq" jdbcType="BIGINT" />
+		<result column="buy_time" property="buyTime" jdbcType="TIMESTAMP" />
+		<result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="FLOAT" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+		<result column="total" property="total" jdbcType="FLOAT" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="company_id" property="companyId" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="pay_way" property="payWay" jdbcType="VARCHAR" />
+		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="notify_data" property="nofityData" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="selectGoodsByCategoryId" parameterType="java.lang.Integer"
+		resultMap="GoodsResultMap">
+		SELECT * FROM tb_goods WHERE category_id = ${value}
+	</select>
+	<select id="selectBizGoods" resultMap="GoodsResultMap">
+		SELECT * FROM tb_goods WHERE category_id IN (2, 3)
+	</select>
+	<select id="getGoods" parameterType="java.lang.Integer"
+		resultMap="GoodsResultMap">
+		SELECT * FROM tb_goods WHERE id = ${value}
+	</select>
+
+
+	<insert id="saveConsume" parameterType="cn.xyz.mianshi.vo.goods.Consume">
+		<selectKey keyProperty="consumeId" resultType="java.lang.Integer"
+			order="AFTER">
+		<![CDATA[
+		SELECT LAST_INSERT_ID() as consumeId
+		]]>
+		</selectKey>
+	<![CDATA[
+	INSERT INTO tb_consume (
+		consume_type_id,
+		consume_time,
+		company_id,
+		user_id,
+		to_user_id,
+		vcount,
+		balance,
+		status
+	)
+	VALUES
+		(
+			#{consumeTypeId,jdbcType=INTEGER}, 
+			NOW(), 
+			#{companyId,jdbcType=INTEGER}, 
+			#{userId,jdbcType=INTEGER},
+			#{toUserId,jdbcType=INTEGER},
+			#{vcount,jdbcType=INTEGER},
+			#{balance,jdbcType=INTEGER},
+			#{status,jdbcType=INTEGER}
+		)
+	]]>
+	</insert>
+
+	<insert id="saveOrder" parameterType="cn.xyz.mianshi.vo.goods.Order">
+		<selectKey keyProperty="orderSeq" resultType="java.lang.Long"
+			order="AFTER">
+		<![CDATA[
+		SELECT LAST_INSERT_ID() as orderSeq
+		]]>
+		</selectKey>
+	<![CDATA[
+	INSERT INTO tb_order (
+		buy_time,
+		goods_id,
+		goods_name,
+		price,
+		count,
+		total,
+		user_id,
+		company_id,
+		status
+	)
+	VALUES
+		(
+			NOW(), 
+			#{goodsId,jdbcType=BIGINT}, 
+			#{goodsName,jdbcType=VARCHAR}, 
+			#{price,jdbcType=FLOAT},
+			#{count,jdbcType=INTEGER},
+			#{total,jdbcType=FLOAT},
+			#{userId,jdbcType=INTEGER},
+			#{companyId,jdbcType=INTEGER},
+			3
+		)
+	]]>
+	</insert>
+
+
+	<update id="updateOrder" parameterType="cn.xyz.mianshi.vo.goods.Order">
+	<![CDATA[
+		UPDATE tb_order SET status = ${status}, pay_way = '${payWay}', pay_time = NOW(), notify_data = '${notifyData}' WHERE order_seq = ${orderSeq}
+	]]>
+	</update>
+
+	<select id="getOrder" parameterType="java.lang.Long" resultMap="OrderResultMap">
+		SELECT * FROM tb_order WHERE order_seq = ${value}
+	</select>
+
+</mapper>

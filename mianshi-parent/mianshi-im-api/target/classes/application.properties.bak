@@ -1,0 +1,83 @@
+
+server.port=8092
+#server.address=121.37.30.25
+#server.sessionTimeout=30
+#server.contextPath=/
+#server.ssl=
+#server.servletPath=/
+
+#logging.file=
+
+#logging.path=
+logging.level=DEBUG
+
+#System Config Properties
+system.config.pushUrl=http://im.juhongtang.net/plugins/shiku/push/msg?text={userId:%1$s,toUserIdList:%2$s,body:'%3$s'}
+#system.config.uploadUrl=http://www.youjob.co/upload/UploadifyServlet
+system.config.uploadUrl=http://www.juhongtang.net/upload/UploadifyServlet
+system.config.passwordKey=JHTeQEQveBx1isY
+
+#XMPP Properties（XMPP主机和端口以及推送用户配置）
+xmpp.host=www.youjob.co
+xmpp.port=5222
+xmpp.username=10005
+xmpp.password=10005
+
+#Mysql DataSource Pool Properties（MySQL数据库配置，用于userId生成）
+datasource.pool.driverClassName=com.mysql.jdbc.Driver
+datasource.pool.username=iktv
+datasource.pool.password=1yz789%4#!hjd@
+datasource.pool.jmxEnabled=true
+datasource.pool.testWhileIdle=true
+datasource.pool.testOnBorrow=true
+datasource.pool.testOnReturn=false
+datasource.pool.validationInterval=30000
+datasource.pool.validationQuery=SELECT 1 FROM DUAL
+datasource.pool.timeBetweenEvictionRunsMillis=30000
+datasource.pool.maxActive=100
+datasource.pool.initialSize=10
+datasource.pool.maxWait=10000
+datasource.pool.minEvictableIdleTimeMillis=30000
+datasource.pool.minIdle=10
+datasource.pool.logAbandoned=false
+datasource.pool.removeAbandoned=true
+datasource.pool.removeAbandonedTimeout=60
+datasource.pool.jdbcInterceptors=org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer
+datasource.pool.url=jdbc:mysql://114.119.6.150:3306/imapi?autoReconnect=true&useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true
+
+#Mongodb Properties（数据库配置）
+mongo.host=114.119.6.150
+mongo.port=27017
+mongo.dbName=imapi
+mongo.username=imapi
+mongo.password=24ecf9040ae31589155b95fcf0d52ccc
+mongo.url=mongodb://114.119.6.150:27017
+
+#Redis Properties（缓存配置）
+redis.host=114.119.6.150
+redis.port=6380
+
+#Open189 Properties（短信下发配置，基于天翼开放平台）
+open.189.app_id=216461910000035461
+open.189.app_secret=6ee8640fa58fb452c69e265f455cabac
+open.189.app_template_id_random=91001047
+open.189.app_template_id_invite=91001772
+
+#不需要访问令牌即可访问的接口
+authorizationFilter.requestUriList[0]=/user/register
+authorizationFilter.requestUriList[1]=/company/register
+authorizationFilter.requestUriList[2]=/user/login
+authorizationFilter.requestUriList[3]=/user/login/auto
+authorizationFilter.requestUriList[4]=/user/get
+authorizationFilter.requestUriList[5]=/verify/telephone
+authorizationFilter.requestUriList[6]=/user/password/update
+authorizationFilter.requestUriList[7]=/basic/randcode/sendSms
+authorizationFilter.requestUriList[8]=/b/circle/msg/square
+authorizationFilter.requestUriList[9]=/b/circle/msg/hot
+authorizationFilter.requestUriList[10]=/b/circle/msg/latest
+authorizationFilter.requestUriList[11]=/b/circle/msg/get
+authorizationFilter.requestUriList[12]=/config
+authorizationFilter.requestUriList[13]=/user/password/reset
+authorizationFilter.requestUriList[14]=/b/circle/msg/comment/list
+authorizationFilter.requestUriList[15]=/job/query
+authorizationFilter.requestUriList[16]=/job/latest
